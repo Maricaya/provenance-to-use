@@ -1157,11 +1157,10 @@ void CDE_begin_at_fileop(struct tcb* tcp, const char* syscall_name) {
       // in ptu execution mode (in sciunit repeat).
       // all tests are passing after commenting them out
       // todo: revisit and possibly remove if solution doesn't work
-
-//    fprintf(stderr,
-//            "CDE WARNING (unsupported operation): %s '%s' is a relative path and dirfd != AT_FDCWD\n",
-//            syscall_name, filename);
-//    goto done; // punt early!
+    fprintf(stderr,
+           "CDE WARNING (unsupported operation): %s '%s' is a relative path and dirfd != AT_FDCWD\n",
+           syscall_name, filename);
+    goto done; // punt early!
   }
 
   if (Cde_exec_mode) {
@@ -1606,7 +1605,7 @@ void CDE_begin_execve(struct tcb* tcp) {
   }
 
   assert(!(is_elf_binary && is_textual_script));
-  
+
   // set up shared memory segment if we haven't done so yet
   // now setup in both audit and exec
   //   to modify the execv of ssh
@@ -3072,7 +3071,7 @@ void CDE_init(char** argv, int optind) {
   if (!CDE_ROOT_NAME) { // if it hasn't been set by the '-o' option, set to a default
     CDE_ROOT_NAME = (char*)CDE_ROOT_NAME_DEFAULT;
   }
-  
+
   CDE_proc_self_exe[0] = '\0';
   int len = readlink("/proc/self/exe",
                      CDE_proc_self_exe, sizeof CDE_proc_self_exe);
@@ -3704,7 +3703,7 @@ static void CDE_init_options() {
 }
 
 void load_environment_vars_from_mem(char* environ_start) {
-  
+
   for (char* environ_str = environ_start; *environ_str;
        environ_str = strchr(environ_str, '\0') + 1) {
 
